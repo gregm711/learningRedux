@@ -15,6 +15,11 @@ var reducer = (state = stateDefault, action) =>  {
                 ...state,
                 searchText: action.searchText
             };
+        case "CHANGE_SHOW_COMPLETED":
+            return  {
+                ...state,
+                searchText: action.showCompleted
+            };
         default:
             return state;
 
@@ -22,11 +27,25 @@ var reducer = (state = stateDefault, action) =>  {
 };
 
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+));
+
+
+store.subscribe(() =>  {
+    var state = store.getState();
+    document.getElementById('app').innerHTML = state.searchText;
+});
 
 store.dispatch({
     type: "CHANGE_SEARCH_TEXT",
     searchText: "text"
+
+});
+
+store.dispatch({
+    type: "CHANGE_SEARCH_TEXT",
+    searchText: "fuck"
 
 });
 
